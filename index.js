@@ -35,18 +35,31 @@ const writeDataToFile = async (propertyIds) => {
               });
               property = response.data;
         } catch(err) {
-            throw new Error('Failed to make the request. ' + err);
+            throw new Error(err);
         }
-        // codigo, bairro, endereço, andar, metro prox, tamanho, condo, iptu, incendio
-        // tx servico, total, mobiliado, noQuartos, noSuites, noVagasCarro, aceitaPets
-        // temElevador
-        // *fiquei devendo info sobre vista livre
+        nearbySubwayStations = []
+        for(j = 0; j < property.placesNearby.length; ++j) {
+            place = property.placesNearby[j];
+            if(place && place.type == "ESTACAO_METRO_OU_TREM") {
+                nearbySubwayStations.push(place.name);
+            }
+        }
+        nearbySubwayStations = [...new Set(nearbySubwayStations)];
+        if(nearbySubwayStations.length == 0) {
+            nearbySubwayStations = "N/A";
+        } else {
+            nearbySubwayStations = nearbySubwayStations.join(" | ");
+        }
+        isAvailable = property.availabilityType != undefined
+        // link, isAvailable, bairro, lat, long, andar, tamanho, aluguel, condo
+        // iptu, incendio, tx servico, total, mobiliado, temElevador, estacoes de metro prox
         const fields = [
-            property.code,
+            'https://www.quintoandar.com.br/imovel/'+property.code,
+            isAvailable,
             property.neighborhood,
-            property.address.zipCode,
+            property.lat,
+            property.lng,
             property.floor,
-            property.nearSubway,
             property.totalArea,
             property.rentValue,
             property.condominiumValue,
@@ -55,12 +68,12 @@ const writeDataToFile = async (propertyIds) => {
             property.tenantServiceFee,
             property.totalCost,
             property.isFurnished,
-            property.bedrooms,
-            property.suites,
-            property.parkingSlots,
-            property.acceptPets,
-            property.hasElevator
+            property.hasElevator,
+            nearbySubwayStations
         ];
+        for(j = 0; j < fields.length; ++j) {
+            if(fields[j] == undefined) fields[j] = "N/A";
+        }
         const content = fields.join();
         fs.appendFileSync(filePath, content + '\n', err => {
             if(err) console.error(err);
