@@ -81,6 +81,7 @@ const getPropertyIds = (htmlData) => {
     for (i = 0; i < matches.length; ++i) {
         ids.push(htmlData.slice(matches[i] + prefixOffset, matches[i] + suffixOffset));
     }
+    ids = [...new Set(ids)];
     return ids;
 }
 
