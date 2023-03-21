@@ -85,8 +85,9 @@ const getPropertyIds = (htmlData) => {
 }
 
 const getData = async() => {
+    const listID = "example_id"; // your list ID here
     try {
-        const response = await axios.get('https://vitrine.quintoandar.com.br/interestShared/42d64187-e6d6-472e-bde5-4ac4b06b693d', {
+        const response = await axios.get('https://vitrine.quintoandar.com.br/interestShared/' + listID, {
             headers: {
               'authority': 'vitrine.quintoandar.com.br',
               'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
