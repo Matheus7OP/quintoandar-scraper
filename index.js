@@ -90,7 +90,7 @@ const getPropertyIds = (htmlData) => {
 }
 
 const getData = async() => {
-    const listID = "42d64187-e6d6-472e-bde5-4ac4b06b693d"; // your list ID here
+    const listID = ""; // your list ID here
     try {
         const response = await axios.get('https://vitrine.quintoandar.com.br/interestShared/' + listID, {
             headers: {},
